@@ -10,7 +10,18 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Service API pour interagir avec les entités volatiles.
+ * Service API for interacting with volatile entities.
+ *
+ * <p>Volatile entities are temporary entities that can be automatically
+ * removed after a period of inactivity or when explicitly invalidated.</p>
+ *
+ * <p>This service provides methods to:</p>
+ * <ul>
+ *   <li>Check if an entity is volatile</li>
+ *   <li>Retrieve volatile component data</li>
+ *   <li>Invalidate entities for removal</li>
+ *   <li>Manage idle timers</li>
+ * </ul>
  */
 @RequiredArgsConstructor
 public class VolatileEntityService {
@@ -18,7 +29,11 @@ public class VolatileEntityService {
     private static final int DEFAULT_TICK_RATE = 20;
 
     /**
-     * Vérifie si une entité est volatile.
+     * Checks whether an entity is volatile.
+     *
+     * @param store the entity store containing the entity
+     * @param ref   the reference to the entity
+     * @return {@code true} if the entity has a volatile component, {@code false} otherwise
      */
     public boolean isVolatile(
             @Nonnull Store<EntityStore> store,
@@ -31,7 +46,11 @@ public class VolatileEntityService {
     }
 
     /**
-     * Récupère le VolatileComponent d'une entité.
+     * Retrieves the {@link VolatileComponent} of an entity.
+     *
+     * @param store the entity store containing the entity
+     * @param ref   the reference to the entity
+     * @return the volatile component, or {@code null} if not found or ref is invalid
      */
     @Nullable
     public VolatileComponent getComponent(
@@ -45,7 +64,10 @@ public class VolatileEntityService {
     }
 
     /**
-     * Invalide une entité volatile (sera supprimée au prochain tick).
+     * Invalidates a volatile entity, marking it for removal on the next tick.
+     *
+     * @param store the entity store containing the entity
+     * @param ref   the reference to the entity
      */
     public void invalidate(
             @Nonnull Store<EntityStore> store,
@@ -55,7 +77,11 @@ public class VolatileEntityService {
     }
 
     /**
-     * Invalide une entité volatile avec une raison.
+     * Invalidates a volatile entity with a specified reason.
+     *
+     * @param store  the entity store containing the entity
+     * @param ref    the reference to the entity
+     * @param reason the reason for invalidation (for logging/debugging), may be {@code null}
      */
     public void invalidate(
             @Nonnull Store<EntityStore> store,
@@ -69,7 +95,12 @@ public class VolatileEntityService {
     }
 
     /**
-     * Reset le timer d'inactivité d'une entité volatile.
+     * Resets the idle timer of a volatile entity.
+     *
+     * <p>This prevents the entity from being removed due to inactivity timeout.</p>
+     *
+     * @param store the entity store containing the entity
+     * @param ref   the reference to the entity
      */
     public void resetIdleTimer(
             @Nonnull Store<EntityStore> store,
@@ -82,7 +113,11 @@ public class VolatileEntityService {
     }
 
     /**
-     * Vérifie si une entité volatile est marquée pour suppression.
+     * Checks whether a volatile entity is marked for removal.
+     *
+     * @param store the entity store containing the entity
+     * @param ref   the reference to the entity
+     * @return {@code true} if the entity is marked for removal, {@code false} otherwise
      */
     public boolean isMarkedForRemoval(
             @Nonnull Store<EntityStore> store,
@@ -93,7 +128,11 @@ public class VolatileEntityService {
     }
 
     /**
-     * Retourne les ticks restants avant timeout.
+     * Returns the remaining ticks before the entity times out.
+     *
+     * @param store the entity store containing the entity
+     * @param ref   the reference to the entity
+     * @return the number of remaining ticks, or {@code -1} if not a volatile entity
      */
     public int getIdleTicksRemaining(
             @Nonnull Store<EntityStore> store,
@@ -104,7 +143,13 @@ public class VolatileEntityService {
     }
 
     /**
-     * Retourne le temps restant en secondes.
+     * Returns the remaining time in seconds before the entity times out.
+     *
+     * <p>Uses the default tick rate of 20 ticks per second.</p>
+     *
+     * @param store the entity store containing the entity
+     * @param ref   the reference to the entity
+     * @return the remaining time in seconds, or {@code 0} if expired or not volatile
      */
     public float getTimeRemainingSeconds(
             @Nonnull Store<EntityStore> store,
@@ -114,7 +159,12 @@ public class VolatileEntityService {
     }
 
     /**
-     * Retourne le temps restant en secondes avec un tick rate personnalisé.
+     * Returns the remaining time in seconds before the entity times out.
+     *
+     * @param store    the entity store containing the entity
+     * @param ref      the reference to the entity
+     * @param tickRate the server tick rate (ticks per second)
+     * @return the remaining time in seconds, or {@code 0} if expired or not volatile
      */
     public float getTimeRemainingSeconds(
             @Nonnull Store<EntityStore> store,
